@@ -16,7 +16,7 @@ def recon_path():
 
 with open('model_config.json') as f:
     args = json.load(f)
-MODE_PATH = 'params/{}.pt'.format(args['name'])
+MODEL_PATH = 'params/{}.pt'.format(args['name'])
 
 
 class Eval:
@@ -31,9 +31,11 @@ class Eval:
         if args['if_parallel']:
             # model = torch.nn.DataParallel(model, device_ids=[0, 1])
             model = torch.nn.DataParallel(model, device_ids=[0])
-        if os.path.exists(MODE_PATH):
-            model.load_state_dict(torch.load(MODE_PATH))
-            print(f"Model is loaded")
+        if os.path.exists(MODEL_PATH):
+            model.load_state_dict(torch.load(MODEL_PATH))
+            print(f"Model is loaded.")
+        else:
+            print("No model found, please train.")
         if torch.cuda.is_available():
             print('Using: ', torch.cuda.get_device_name(torch.cuda.current_device()))
             model.cuda()
